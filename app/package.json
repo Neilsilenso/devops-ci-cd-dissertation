@@ -1,0 +1,16 @@
+{
+  "name": "devops-dissertation-api",
+  "version": "1.0.0",
+  "description": "Node.js REST API for BITS Pilani DevOps Dissertation",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": ["devops", "api", "dissertation"],
+  "author": "Aswin C",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
