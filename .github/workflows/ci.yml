@@ -29,8 +29,24 @@ jobs:
         working-directory: ./app
         run: npm test || echo "Tests passed"
 
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './app'
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
   build-and-push-ecr:
-    needs: build-and-test
+    needs: [build-and-test, security-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -71,15 +87,11 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
             export AWS_DEFAULT_REGION=${{ env.AWS_REGION }}
             
-            # Login to ECR from the EC2 instance
             aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
             
-            # Pull the new image
             docker pull ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
             
-            # Stop and remove the old container
             docker stop dissertation-api || true
             docker rm dissertation-api || true
             
-            # Run the new container
             docker run -d --name dissertation-api -p 3000:3000 ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
