@@ -1,49 +1,35 @@
-# DevOps CI/CD Dissertation Project
-## BITS Pilani - B.Tech Information Systems  
-### Design and Implementation of a CI/CD Pipeline with Infrastructure as Code for Automated Cloud Deployment on AWS
+# DevOps CI/CD Pipeline with Infrastructure as Code on AWS
 
-Status	: In Progress (May-Aug 2026)  
-Tools	: Terraform, Docker, GitHub Actions, AWS (EC2/ECS), CloudWatch  
-Goal	: Zero-cost, portfolio-ready DevOps automation project
+Automated software delivery pipeline reducing deployment time by 99% (from 3 hours to <1 minute) using GitHub Actions, Terraform, and Docker on AWS Free Tier.
 
-##  Repository Structure
+## Architecture Overview
 
-├── app/ # Node.js application source
-├── terraform/ # Infrastructure as Code (IaC)
-│ ├── modules/ # Reusable Terraform modules
-│ │ ├── vpc/ # Virtual Private Cloud
-│ │ ├── ec2/ # EC2 instances
-│ │ ├── ecr/ # Container Registry
-│ │ └── ecs/ # Container Service
-│ └── backend.tf # Remote state (S3 + DynamoDB)
-├── .github/workflows/ # GitHub Actions CI/CD pipelines
-├── docs/ # Dissertation documents & diagrams
-├── scripts/ # Utility scripts
-└── monitoring/ # CloudWatch dashboards & alerts
+The system implements a fully automated GitOps workflow:
+1. **Developer** pushes code to the `main` branch.
+2. **GitHub Actions** triggers the CI pipeline:
+   - Runs unit tests.
+   - Executes Trivy vulnerability scanning.
+   - Builds a multi-stage Docker image.
+   - Pushes the image to AWS ECR tagged with the commit SHA.
+3. **CD Deployment** automatically SSHs into the AWS EC2 instance, pulls the new image, and restarts the container.
+4. **Monitoring** via AWS CloudWatch triggers SNS email alerts if CPU utilization exceeds 80%.
 
+## Tech Stack
 
-## Dissertation Details
-- Research Area	: Introduction to DevOPS (Primary), Cloud Computing (Secondary)
-- Timeline	: May 12 - August 17, 2026 (14 weeks)
-- Deliverables	: Working CI/CD pipeline + Dissertation report + Portfolio repo
+*   **Cloud:** AWS (EC2, VPC, ECR, S3, CloudWatch, SNS, IAM)
+*   **IaC:** Terraform (Modular architecture with remote state locking)
+*   **CI/CD:** GitHub Actions
+*   **Containerization:** Docker (Multi-stage builds, non-root user)
+*   **Application:** Node.js (Express)
+*   **Security:** Trivy (Vulnerability scanning), GitHub Secrets
 
-## Quick Start
-1. Clone this repository
-2. Configure AWS credentials
-3. Run `terraform init` in `terraform/` directory
-4. Follow weekly progress in `docs/progress-log.md`
+## Repository Structure
 
-## Weekly Progress
-See [Progress Log](docs/progress-log.md)
-
-## Dissertation Chapters
-- [Chapter 1: Introduction](docs/dissertation-chapters/chapter-1-introduction.md)
-- Chapter 2: Literature Review (Coming soon)
-- Chapter 3: System Design (Coming soon)
-- Chapter 4: Implementation (Coming soon)
-- Chapter 5: Testing & Results (Coming soon)
-- Chapter 6: Conclusion (Coming soon)
-  
-> Viva Demo Test - 14-07-2026
-
-> Today was the viva day at 11:10 AM
+```text
+.
+├── .github/workflows/    # CI/CD pipeline definitions
+── app/                   # Node.js application source & Dockerfile
+├── terraform/            # Infrastructure as Code modules
+│   ├── modules/          # Reusable VPC and EC2 modules
+│   └── backend.tf        # Remote state configuration (S3 + DynamoDB)
+└── docs/                 # Architecture diagrams and documentation
