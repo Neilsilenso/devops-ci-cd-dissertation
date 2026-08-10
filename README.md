@@ -28,7 +28,7 @@ The system implements a fully automated GitOps workflow:
 ```text
 .
 ├── .github/workflows/    # CI/CD pipeline definitions
-── app/                  # Node.js application source & Dockerfile
+── app/                   # Node.js application source & Dockerfile
 ├── terraform/            # Infrastructure as Code modules
 │   ├── modules/          # Reusable VPC and EC2 modules
 │   └── backend.tf        # Remote state configuration (S3 + DynamoDB)
