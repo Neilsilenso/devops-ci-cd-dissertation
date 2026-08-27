@@ -8,7 +8,7 @@ module "vpc" {
   availability_zone  = var.availability_zone
 }
 
-# Call EC2 module (depends on VPC outputs)
+# Call EC2 module
 module "ec2" {
   source = "./modules/ec2"
 
