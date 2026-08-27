@@ -81,4 +81,3 @@ curl http://<EC2_PUBLIC_IP>:3000/health
 
 This project is licensed under the MIT License. See the (LICENSE) file for details.
 ```
-License is added for this project
