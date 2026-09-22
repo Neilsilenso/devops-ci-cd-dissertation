@@ -50,7 +50,7 @@ Triggered automatically on every push to the `main` branch:
 
 ---
 
-## 🔒 Security & Observability
+##  Security & Observability
 
 - **Least Privilege IAM:** The GitHub Actions IAM user is scoped strictly to ECR push and EC2 describe actions.
 - **Secrets Management:** All AWS credentials and SSH keys are stored as encrypted GitHub Secrets.
